@@ -1,13 +1,152 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1d36"><meta name="description" content="AirX airline booking demo with a smart travel assistant"><title>AirX | Your world, within reach</title><link rel="stylesheet" href="/styles.css"></head>
-<body><header class="header"><div class="nav shell"><a class="logo" href="#home" aria-label="AirX homepage"><span class="logo-icon">✈</span> AIR<span class="x">X</span></a><nav aria-label="Main navigation"><a href="#search">Book a flight</a><a href="#manage">Manage booking</a><a href="#discover">Explore</a></nav><button class="outline light" id="agentOpen">✦ Ask AirX AI</button></div></header>
-<main id="home"><section class="hero"><div class="shell hero-inner"><div class="eyebrow">✦ THE JOURNEY STARTS HERE</div><h1>Discover more.<br><em>Go further.</em></h1><p>Wherever you're headed, your next extraordinary journey starts with AirX.</p><div class="hero-pills"><span>✓ Transparent fares</span><span>✓ Easy booking</span><span>✓ AI travel assistant</span></div></div></section>
-<section class="shell booking-position" id="search"><div class="search-card"><div class="card-head"><div><p class="small-heading">YOUR NEXT ADVENTURE</p><h2>Find your perfect flight</h2></div><span class="demo-tag">DEMO AIRLINE · NO REAL TICKETS</span></div><form id="searchForm"><div class="triptype"><label><input type="radio" name="trip" value="oneway" checked> One way</label><span class="muted">Sample direct flights only</span></div><div class="form-grid"><label>From<select id="from" required></select></label><button type="button" id="swap" class="swap" aria-label="Swap airports">⇄</button><label>To<select id="to" required></select></label><label>Departure date<input type="date" id="date" required></label><label>Travelers<select id="passengers"><option value="1">1 traveler</option><option value="2">2 travelers</option><option value="3">3 travelers</option><option value="4">4 travelers</option><option value="5">5 travelers</option><option value="6">6 travelers</option></select></label><label>Cabin<select id="cabin"><option>Economy</option><option>Premium Economy</option><option>Business</option></select></label><button class="primary search-btn" type="submit">Search flights <span>↗</span></button></div></form></div></section>
-<section class="shell results-section" id="results" hidden><div class="section-top"><div><p class="small-heading">AVAILABLE OPTIONS</p><h2 id="resultsTitle">Flights for you</h2></div><span id="resultCount" class="muted"></span></div><div id="flightResults" class="flights"></div></section>
-<section class="shell features" id="discover"><div class="section-top"><div><p class="small-heading">WHY FLY AIRX</p><h2>Travel, thoughtfully reimagined.</h2></div><p class="muted">A flight-booking demonstration designed around clarity, convenience, and intelligent assistance.</p></div><div class="feature-grid"><article><span class="feature-icon">✦</span><h3>AI-powered assistance</h3><p>Search routes and compare flight options through a friendly conversational agent.</p></article><article><span class="feature-icon">◇</span><h3>Flights made simple</h3><p>Transparent fares, streamlined checkout, and instant demo confirmation codes.</p></article><article><span class="feature-icon">◎</span><h3>You're in control</h3><p>Look up your itinerary and cancel your sample reservation whenever you want.</p></article></div></section>
-<section class="shell manage-section" id="manage"><div class="manage-copy"><p class="small-heading">YOUR TRIP, YOUR WAY</p><h2>Manage your journey</h2><p>Already made an AirX demo booking? Find your itinerary with your confirmation code and email.</p></div><form id="lookupForm" class="manage-form"><label>Confirmation code<input id="lookupRef" maxlength="20" placeholder="e.g. A1B2C3D4" required></label><label>Email address<input id="lookupEmail" type="email" placeholder="you@example.com" required></label><button class="primary" type="submit">Find my booking →</button><div id="lookupResult" class="feedback" aria-live="polite"></div></form></section>
-</main><footer><div class="shell footer-inner"><div><div class="logo">✈ AIR<span class="x">X</span></div><p>Imaginary airline. Real-world inspired demo.</p></div><div>© <span id="year"></span> AirX · Portfolio project · No real flights, fares, payments or tickets.</div></div></footer>
-<button id="agentFloat" class="agent-float" aria-label="Open AI travel assistant">✦ <span>AirX Agent</span></button>
-<aside id="agentPanel" class="agent-panel" hidden aria-label="AirX travel agent"><div class="agent-head"><div><strong>✦ AirX Travel Agent</strong><small>Your personal flight copilot · Demo</small></div><button class="icon-btn" id="agentClose" aria-label="Close travel agent">×</button></div><div class="chat" id="chat" role="log" aria-live="polite"><div class="bubble assistant">Hello! I'm your AirX travel agent. Tell me where you're going, and I'll find your next flight. Try “Pittsburgh to Chicago on 2026-11-12”.</div></div><form id="chatForm" class="chat-form"><input id="chatInput" aria-label="Message the travel agent" maxlength="1000" placeholder="Where would you like to go?" required><button class="primary" aria-label="Send message">➤</button></form></aside>
-<dialog id="bookingDialog"><form id="bookingForm"><div class="modal-head"><div><p class="small-heading">FINAL STEP</p><h2>Complete demo booking</h2></div><button type="button" id="dialogClose" class="icon-btn" aria-label="Close">×</button></div><div class="booking-summary" id="bookingSummary"></div><label>Full passenger name<input id="travelerName" minlength="2" maxlength="100" autocomplete="name" required></label><label>Email address<input id="travelerEmail" type="email" autocomplete="email" required></label><label class="check"><input id="demoConfirm" type="checkbox" required> I understand this is a simulated booking: no payment, real ticket, or reservation with an airline.</label><button type="submit" class="primary full">Confirm demo booking</button><div id="bookingFeedback" class="feedback" aria-live="polite"></div></form></dialog>
-<script type="module" src="/app.js"></script></body></html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#0b1d36">
+    <meta name="description" content="AirX airline booking demo with a smart travel assistant">
+    <title>AirX | Your world, within reach</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="nav shell"><a class="logo" href="#home" aria-label="AirX homepage"><span class="logo-icon">✈</span>
+                AIR<span class="x">X</span></a>
+            <nav aria-label="Main navigation"><a href="#search">Book a flight</a><a href="#manage">Manage booking</a><a
+                    href="#discover">Explore</a></nav><button class="outline light" id="agentOpen">✦ Ask AirX
+                AI</button>
+        </div>
+    </header>
+    <main id="home">
+        <section class="hero">
+            <div class="shell hero-inner">
+                <div class="eyebrow">✦ THE JOURNEY STARTS HERE</div>
+                <h1>Discover more.<br><em>Go further.</em></h1>
+                <p>Wherever you're headed, your next extraordinary journey starts with AirX.</p>
+                <div class="hero-pills"><span>✓ Transparent fares</span><span>✓ Easy booking</span><span>✓ AI travel
+                        assistant</span></div>
+            </div>
+        </section>
+        <section class="shell booking-position" id="search">
+            <div class="search-card">
+                <div class="card-head">
+                    <div>
+                        <p class="small-heading">YOUR NEXT ADVENTURE</p>
+                        <h2>Find your perfect flight</h2>
+                    </div><span class="demo-tag">DEMO AIRLINE · NO REAL TICKETS</span>
+                </div>
+                <form id="searchForm">
+                    <div class="triptype"><label><input type="radio" name="trip" value="oneway" checked> One
+                            way</label><span class="muted">Sample direct flights only</span></div>
+                    <div class="form-grid"><label>From<select id="from" required></select></label><button type="button"
+                            id="swap" class="swap" aria-label="Swap airports">⇄</button><label>To<select id="to"
+                                required></select></label><label>Departure date<input type="date" id="date"
+                                required></label><label>Travelers<select id="passengers">
+                                <option value="1">1 traveler</option>
+                                <option value="2">2 travelers</option>
+                                <option value="3">3 travelers</option>
+                                <option value="4">4 travelers</option>
+                                <option value="5">5 travelers</option>
+                                <option value="6">6 travelers</option>
+                            </select></label><label>Cabin<select id="cabin">
+                                <option>Economy</option>
+                                <option>Premium Economy</option>
+                                <option>Business</option>
+                            </select></label><button class="primary search-btn" type="submit">Search flights
+                            <span>↗</span></button></div>
+                </form>
+            </div>
+        </section>
+        <section class="shell results-section" id="results" hidden>
+            <div class="section-top">
+                <div>
+                    <p class="small-heading">AVAILABLE OPTIONS</p>
+                    <h2 id="resultsTitle">Flights for you</h2>
+                </div><span id="resultCount" class="muted"></span>
+            </div>
+            <div id="flightResults" class="flights"></div>
+        </section>
+        <section class="shell features" id="discover">
+            <div class="section-top">
+                <div>
+                    <p class="small-heading">WHY FLY AIRX</p>
+                    <h2>Travel, thoughtfully reimagined.</h2>
+                </div>
+                <p class="muted">A flight-booking demonstration designed around clarity, convenience, and intelligent
+                    assistance.</p>
+            </div>
+            <div class="feature-grid">
+                <article><span class="feature-icon">✦</span>
+                    <h3>AI-powered assistance</h3>
+                    <p>Search routes and compare flight options through a friendly conversational agent.</p>
+                </article>
+                <article><span class="feature-icon">◇</span>
+                    <h3>Flights made simple</h3>
+                    <p>Transparent fares, streamlined checkout, and instant demo confirmation codes.</p>
+                </article>
+                <article><span class="feature-icon">◎</span>
+                    <h3>You're in control</h3>
+                    <p>Look up your itinerary and cancel your sample reservation whenever you want.</p>
+                </article>
+            </div>
+        </section>
+        <section class="shell manage-section" id="manage">
+            <div class="manage-copy">
+                <p class="small-heading">YOUR TRIP, YOUR WAY</p>
+                <h2>Manage your journey</h2>
+                <p>Already made an AirX demo booking? Find your itinerary with your confirmation code and email.</p>
+            </div>
+            <form id="lookupForm" class="manage-form"><label>Confirmation code<input id="lookupRef" maxlength="20"
+                        placeholder="e.g. A1B2C3D4" required></label><label>Email address<input id="lookupEmail"
+                        type="email" placeholder="you@example.com" required></label><button class="primary"
+                    type="submit">Find my booking →</button>
+                <div id="lookupResult" class="feedback" aria-live="polite"></div>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <div class="shell footer-inner">
+            <div>
+                <div class="logo">✈ AIR<span class="x">X</span></div>
+                <p>Imaginary airline. Real-world inspired demo.</p>
+            </div>
+            <div>© <span id="year"></span> AirX · Portfolio project · No real flights, fares, payments or tickets.</div>
+        </div>
+    </footer>
+    <button id="agentFloat" class="agent-float" aria-label="Open AI travel assistant">✦ <span>AirX Agent</span></button>
+    <aside id="agentPanel" class="agent-panel" hidden aria-label="AirX travel agent">
+        <div class="agent-head">
+            <div><strong>✦ AirX Travel Agent</strong><small>Your personal flight copilot · Demo</small></div><button
+                class="icon-btn" id="agentClose" aria-label="Close travel agent">×</button>
+        </div>
+        <div class="chat" id="chat" role="log" aria-live="polite">
+            <div class="bubble assistant">Hello! I'm your AirX travel agent. Tell me where you're going, and I'll find
+                your next flight. Try “Pittsburgh to Chicago on 2026-11-12”.</div>
+        </div>
+        <form id="chatForm" class="chat-form"><input id="chatInput" aria-label="Message the travel agent"
+                maxlength="1000" placeholder="Where would you like to go?" required><button class="primary"
+                aria-label="Send message">➤</button></form>
+    </aside>
+    <dialog id="bookingDialog">
+        <form id="bookingForm">
+            <div class="modal-head">
+                <div>
+                    <p class="small-heading">FINAL STEP</p>
+                    <h2>Complete demo booking</h2>
+                </div><button type="button" id="dialogClose" class="icon-btn" aria-label="Close">×</button>
+            </div>
+            <div class="booking-summary" id="bookingSummary"></div><label>Full passenger name<input id="travelerName"
+                    minlength="2" maxlength="100" autocomplete="name" required></label><label>Email address<input
+                    id="travelerEmail" type="email" autocomplete="email" required></label><label class="check"><input
+                    id="demoConfirm" type="checkbox" required> I understand this is a simulated booking: no payment,
+                real ticket, or reservation with an airline.</label><button type="submit" class="primary full">Confirm
+                demo booking</button>
+            <div id="bookingFeedback" class="feedback" aria-live="polite"></div>
+        </form>
+    </dialog>
+    <script type="module" src="/app.js"></script>
+</body>
+
+</html>
